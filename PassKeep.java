@@ -146,37 +146,31 @@ public class PassKeep {
 
 	public static void decryptFile(Cipher cipher, SecretKey aesKey) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
-        byte[] iv;
-        byte[] secret_Key;
-
         try{
             BufferedReader br = new BufferedReader( new FileReader( "Not_Secret_Stuff.txt" ) );
             String ivSTR = br.readLine();
 			String secret_key = br.readLine();
 			
-            secret_Key = DatatypeConverter.parseBase64Binary( secret_key );
-            iv = DatatypeConverter.parseBase64Binary( ivSTR );
+            byte[] secret_Key = DatatypeConverter.parseBase64Binary( secret_key );
+            byte[] iv = DatatypeConverter.parseBase64Binary( ivSTR );
 
             IvParameterSpec receiver_iv = new IvParameterSpec( iv );
             SecretKey receiver_secret = new SecretKeySpec( secret_Key, "AES" );
-
-            Cipher receiver_cipher = Cipher.getInstance( "AES/CBC/PKCS5Padding" );
+			Cipher receiver_cipher = Cipher.getInstance( "AES/CBC/PKCS5Padding" );
             receiver_cipher.init( Cipher.DECRYPT_MODE, receiver_secret, receiver_iv );
-
+			
             BufferedReader file = new BufferedReader( new FileReader( "Password_Keeper.txt" ) );
             String inputStr = file.readLine();
             file.close();
 			
             byte[] cipherText = DatatypeConverter.parseBase64Binary(inputStr);
             String plainText = new String(receiver_cipher.doFinal(cipherText), "UTF-8");
-            System.out.println(plainText);
-
+			
+			FileOutputStream fileOut = new FileOutputStream( "Password_Keeper.txt" );
+            fileOut.write(plainText.getBytes());
+            fileOut.close();
         }
-        catch ( IOException  | BadPaddingException | IllegalBlockSizeException e )
-        {
-            e.printStackTrace();
-        }
-
+        catch ( IOException  | BadPaddingException | IllegalBlockSizeException e ) {e.printStackTrace();}
     }
 	
 	public static void encryptFile(Cipher cipher, SecretKey aesKey) throws InvalidKeyException
@@ -218,10 +212,7 @@ public class PassKeep {
 			FileOut.write(SECRET.getBytes());
 
         }
-        catch ( IOException | IllegalBlockSizeException | BadPaddingException e )
-        {
-            e.printStackTrace();
-        }
+        catch ( IOException | IllegalBlockSizeException | BadPaddingException e ) {e.printStackTrace();}
     }
 
 	public static void changeMasterPassword(String replaceWith, String type){
