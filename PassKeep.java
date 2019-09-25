@@ -113,7 +113,7 @@ public class PassKeep {
                     if (isFileCreated == false)
                         System.out.println("\nFile not created! Please choose option 1");
                     else
-                        //shareFile(cipher, aesKey);
+                        shareFile(aesKey, cipher);
                     break;
 
                 case 6:
@@ -302,7 +302,9 @@ public class PassKeep {
     }
 	
     //https://beginnersbook.com/2014/05/how-to-copy-a-file-to-another-file-in-java/
-    public static void shareFile( SecretKey aesKey, Cipher cipher) throws IOException{
+    public static void shareFile( SecretKey aesKey, Cipher cipher) throws IOException, NoSuchAlgorithmException, 
+	NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, 
+	UnsupportedEncodingException, InvalidAlgorithmParameterException {
         FileInputStream inStream = null;
         FileOutputStream outStream = null;
         String selection;
@@ -337,9 +339,13 @@ public class PassKeep {
                 }
             }
 
+			String inputStr = id + "\t\t" + user + "\t\t" + password;
+			
+			cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+			byte[] ciphertext = cipher.doFinal(inputStr.getBytes("UTF-8"));
+
             pw = new PrintWriter(outFile);
-            pw.println("ID\t\tUSER\t\tPASSWORD");
-            pw.println( id + "\t\t" + user + "\t\t" + password );
+            pw.println(DatatypeConverter.printBase64Binary(ciphertext));
             pw.close();
 
             System.out.println( "\nFile: [Password_Keeper_Share.txt] saved successfully for sharing." );
