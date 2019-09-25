@@ -147,25 +147,30 @@ public class PassKeep {
 	public static void decryptFile(Cipher cipher, SecretKey aesKey) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
         try{
+			// Read in IV and Key from file
             BufferedReader br = new BufferedReader( new FileReader( "Not_Secret_Stuff.txt" ) );
             String ivSTR = br.readLine();
 			String secret_key = br.readLine();
-			
             byte[] secret_Key = DatatypeConverter.parseBase64Binary( secret_key );
             byte[] iv = DatatypeConverter.parseBase64Binary( ivSTR );
-
-            IvParameterSpec receiver_iv = new IvParameterSpec( iv );
-            SecretKey receiver_secret = new SecretKeySpec( secret_Key, "AES" );
-			Cipher receiver_cipher = Cipher.getInstance( "AES/CBC/PKCS5Padding" );
-            receiver_cipher.init( Cipher.DECRYPT_MODE, receiver_secret, receiver_iv );
 			
+			// Read in encrypted Password Keeper file and store in byte[] cipherText
+			// readLine() automatically cuts off new line char
             BufferedReader file = new BufferedReader( new FileReader( "Password_Keeper.txt" ) );
             String inputStr = file.readLine();
             file.close();
 			
+			// THIS LINE HERE KEEPS THROWING INDEX OUT OF BOUNDS!!!!!
             byte[] cipherText = DatatypeConverter.parseBase64Binary(inputStr);
+			
+			// Decrypt cipherText[] and store in a string
+			IvParameterSpec receiver_iv = new IvParameterSpec( iv );
+            SecretKey receiver_secret = new SecretKeySpec( secret_Key, "AES" );
+			Cipher receiver_cipher = Cipher.getInstance( "AES/CBC/PKCS5Padding" );
+            receiver_cipher.init( Cipher.DECRYPT_MODE, receiver_secret, receiver_iv );
             String plainText = new String(receiver_cipher.doFinal(cipherText), "UTF-8");
 			
+			// Write out decrytped ciphertext into Password_Keeper.txt replacing the encrypted file
 			FileOutputStream fileOut = new FileOutputStream( "Password_Keeper.txt" );
             fileOut.write(plainText.getBytes());
             fileOut.close();
@@ -173,6 +178,7 @@ public class PassKeep {
         catch ( IOException  | BadPaddingException | IllegalBlockSizeException e ) {e.printStackTrace();}
     }
 	
+	// Leave this alone it is working as it should
 	public static void encryptFile(Cipher cipher, SecretKey aesKey) throws InvalidKeyException
     {
         cipher.init(Cipher.ENCRYPT_MODE,aesKey);
