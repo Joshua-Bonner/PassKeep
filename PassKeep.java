@@ -156,11 +156,9 @@ public class PassKeep {
 			
 			// Read in encrypted Password Keeper file and store in byte[] cipherText
 			// readLine() automatically cuts off new line char
-            BufferedReader file = new BufferedReader( new FileReader( "Password_Keeper.txt" ) );
+            BufferedReader file = new BufferedReader( new FileReader( "Password_Keeper.txt" ));
             String inputStr = file.readLine();
             file.close();
-			
-			// THIS LINE HERE KEEPS THROWING INDEX OUT OF BOUNDS!!!!!
             byte[] cipherText = DatatypeConverter.parseBase64Binary(inputStr);
 			
 			// Decrypt cipherText[] and store in a string
@@ -190,7 +188,7 @@ public class PassKeep {
         {
             BufferedReader file = new BufferedReader( new FileReader( "Password_Keeper.txt" ) );
             StringBuffer strBuffer = new StringBuffer(  );
-            String line = null;
+            String line = "";
 
             while((line = file.readLine()) != null)
             {
@@ -202,8 +200,8 @@ public class PassKeep {
             String inputStr = strBuffer.toString();
             byte[] cipherText = cipher.doFinal(inputStr.getBytes("UTF-8"));
 
-            FileOutputStream fileOut = new FileOutputStream( "Password_Keeper.txt" );
-            fileOut.write(cipherText);
+            PrintWriter fileOut = new PrintWriter( "Password_Keeper.txt" );
+            fileOut.println(DatatypeConverter.printBase64Binary(cipherText));
             fileOut.close();
 
             File notSecretStuff = new File("Not_Secret_Stuff.txt");
