@@ -450,59 +450,32 @@ public class PassKeep {
 
 /*------------------------------------------------------------------------------
 Questions:
-1) What are the assets that your program should protect?
-	
-	It is of high importance to secure access to this text file as its contents hold the information necessary to access 
-	a user's personal information that may end up compromising their entire livelihood.
+2) Description of how we are using symmetric key encryption, including how we are sharing the keys used in 
+   encrypting exported passwords.
+   	
+   	For the Symmetric Key encryption, we have our main file with the master password and user passwords, then we have the
+	IV And Secret Key encrypted in a separate file, that we utilize in the program to decrypt our password file.
 
-	The default master password should also be secured/encrypted, in case the user does not change the default.
+	When we encrypt the shared password file, 
 
-2) What are the security goals for these assets?
+3) What are the revisied list of vulnerabilities?
+	If the program is left running, the password file is left available to anyone to open and view it, hence the file is
+	still easily accessible against the user's will. 
 
-	Ensure that nooone but the user has access to the information inside this text document.
+	As written, there is now a short wait time between the user incorrectly inputting passwords to gain access to the
+	program. So this is still vulnerable to brute force attacks, it will just take longer as the program will have a timer
+	and close after 5 incorrect password attempts. 
 
-3) What are potential adversaries?
+	The random password generation has recieved an upgrade requiring 2 uppercase letters, 10 lowercase letters, 2 numbers,
+	and 2 special characters. Once the letters have been selected, they are then shuffled. Therefor, to our knowledge, 
+	the random password is no longer insecure as it had been.
 
-	Anyone outside of the user that accesses this file can use the information provided to cause the user undue stress and harm.
+	The random password is hard coded to be 16 characters long, however if the user decides to create their own password, 
+	the user can still make a bad decision to not follow these requirements as the random password generator follows. 
+	Additionally, the user should not be allowed to have the same password for each login.
 
-4) What are the vulnerabilities for your vault, as it is currently designed and implemented?  (Limit your discussion to 1 page).
-
-	If someone has access to the device in which the text file "Password_Keeper.txt" is stored, they can easily access the file without
-	having to run the program. By simply locating where the file is stored, anyone can access its contents and potentially use them
-	against the actual user's will. Although we have implemented a function that requires the user to input the correct credentials within
-	the program as it is running in order to access the main functions of this program, it does not impede or prevent anyone from obtaining
-	the information it attempts to conceal.
-
-	As the program is written, a brute force attack could easily obtain the master password thus allowing the attacker complete
-	access to all the username and password combinations.
-
-	Also, the random password generator includes a very select number of letters and numbers, therefore reducing the potential
-	combinations of passwords that can be generated.
-
-	A user should never share his or her passwords, so having a function that allows this is not a good practice.
-
-	The default password is stored, in plain text, in the program itself, therefore it would be easy to steal the password information
-	if the user has not changed the default password. The program should force the user to change the default password at the time of
-	the file creation.
-
-	There is also no requirement on password length or complexitiy. Forcing the user to have a longer more secure password will make
-	it more difficult for an attacker to steal the user's password information. Additionally, the user should not be allowed to have
-	the same password for each login.
-
-5) How might the risk that you face change over time?  Specifically address the two components of risk.
-
-    Probablity of a threat exploiting the vulnerability: Over time, the more entries in the file, the more chances that a particular password
-    will work for more than one login. Human beings are creatures of habit, making it easy for attackers to potentially gain access to their
-    passwords and logins because they tend to use the same or similar passwords. If the attacker can gain access to a set of old passwords
-    they can track common habits such as always making an E a 3, or S a $. As the human being gets older their habits can be analized (by
-    the right person) to the point that the attacker can learn more than just their passwords and logins.
-
-    Impact in dollars: The impact in dollars can vary depending on the person. Someone who makes minimum wage would be hugely impacted
-    by an attacker spending $100 from a bank account whereas someone who makes $100K would be less impacted. Also, the impact that an attacker
-    can impart on a user can be something that is hard to put a dollar amount to. If an attacker creates a persona of the victim and allows that
-    persona to 'live' for 20 years, the victim could have issues getting a job, buying a car or house, etc since that persona could be found
-    instead of the actual person. It would be like googling yourself only to find that the real you is not found, only the fake you and the
-    fake you is not like you at all. Using a program such as this one would make it extremely easy for something like this to occur and the
-    victim may never know that something happened.
+	Once the user has logged in and the programming is running, if the user walks away not only can an adversary
+	come up to the computer and get into the unencrypted password file, the program does not ask for the password other
+	than at the very beginning of the program. 
 
 */
