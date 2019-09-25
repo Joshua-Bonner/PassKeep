@@ -113,12 +113,13 @@ public class PassKeep {
                     if (isFileCreated == false)
                         System.out.println("\nFile not created! Please choose option 1");
                     else
-                        //shareFile();
+                        //shareFile(cipher, aesKey);
                     break;
 
                 case 6:
                     System.out.println("\nThank you for using Password Keeper!\n");
-					encryptFile(cipher, aesKey);
+					if (isFileCreated == true)
+						encryptFile(cipher, aesKey);
                     System.exit(0);
                     break;
 
@@ -176,7 +177,6 @@ public class PassKeep {
         catch ( IOException  | BadPaddingException | IllegalBlockSizeException e ) {e.printStackTrace();}
     }
 	
-	// Leave this alone it is working as it should
 	public static void encryptFile(Cipher cipher, SecretKey aesKey) throws InvalidKeyException
     {
         cipher.init(Cipher.ENCRYPT_MODE,aesKey);
@@ -210,7 +210,7 @@ public class PassKeep {
 			String IV = DatatypeConverter.printBase64Binary(iv);
 			String SECRET = DatatypeConverter.printBase64Binary(secret);
 			
-			FileOutputStream FileOut = new FileOutputStream ("Not_Secret_Stuff.txt");
+			FileOutputStream FileOut = new FileOutputStream("Not_Secret_Stuff.txt");
 			FileOut.write(IV.getBytes());
 			FileOut.write('\n');
 			FileOut.write(SECRET.getBytes());
@@ -302,7 +302,7 @@ public class PassKeep {
     }
 	
     //https://beginnersbook.com/2014/05/how-to-copy-a-file-to-another-file-in-java/
-    public static void shareFile( SecretKey aesKey, byte[] iv, Cipher cipher) throws IOException{
+    public static void shareFile( SecretKey aesKey, Cipher cipher) throws IOException{
         FileInputStream inStream = null;
         FileOutputStream outStream = null;
         String selection;
