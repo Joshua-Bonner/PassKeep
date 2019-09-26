@@ -302,9 +302,8 @@ public class PassKeep {
     }
 	
     //https://beginnersbook.com/2014/05/how-to-copy-a-file-to-another-file-in-java/
-    public static void shareFile( SecretKey aesKey, Cipher cipher) throws IOException, NoSuchAlgorithmException, 
-	NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, 
-	UnsupportedEncodingException, InvalidAlgorithmParameterException {
+    public static void shareFile( SecretKey aesKey, Cipher cipher) throws IOException, InvalidKeyException, IllegalBlockSizeException,
+            BadPaddingException{
         FileInputStream inStream = null;
         FileOutputStream outStream = null;
         String selection;
@@ -454,23 +453,24 @@ Questions:
    encrypting exported passwords.
    	
    	For the Symmetric Key encryption, we have our Password_Keeper file with the master password and user passwords, then
-       	we have the IV And Secret Key encrypted in the Not_Secret_Stuff file, that we utilize in the program to decrypt our
+       	we have the IV And Secret Key unencrypted in the Not_Secret_Stuff file, that we utilize in the program to decrypt our
        	password file.
 
 	When we encrypt the Password_Keeper_Share file, it uses the same encryption key as the Password_Keeper file so when
-       	sharing, we send both the Passowrd_Keeper_Share file as well as our Not_Secret_Stuff file.
+       	sharing, we send both the Password_Keeper_Share file as well as our Not_Secret_Stuff file.
 
-3) What are the revisied list of vulnerabilities?
-	If the program is left running, the password file is left available to anyone to open and view it, hence the file is
+3) What are the revised list of vulnerabilities?
+	If the program is left running, the password file is left unencrypted for anyone to open and view, hence the file is
 	still easily accessible against the user's will. 
 
 	As written, there is now a short wait time between the user incorrectly inputting passwords to gain access to the
 	program. So this is still vulnerable to brute force attacks, it will just take longer as the program will have a timer
-	and close after 5 incorrect password attempts. 
+	and close after 5 incorrect password attempts. Additionally, the Password_Keeper.txt file is still unencrypted during this
+	wait time.
 
-	The random password generation has recieved an upgrade requiring 2 uppercase letters, 10 lowercase letters, 2 numbers,
+	The random password generation has received an upgrade requiring 2 uppercase letters, 10 lowercase letters, 2 numbers,
 	and 2 special characters. Once the letters have been selected, they are then shuffled. Therefor, to our knowledge, 
-	the random password is no longer insecure as it had been.
+	the random password is no longer as insecure as it had been.
 
 	The random password is hard coded to be 16 characters long, however if the user decides to create their own password, 
 	the user can still make a bad decision to not follow these requirements as the random password generator follows. 
