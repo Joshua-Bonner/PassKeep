@@ -453,10 +453,12 @@ Questions:
 2) Description of how we are using symmetric key encryption, including how we are sharing the keys used in 
    encrypting exported passwords.
    	
-   	For the Symmetric Key encryption, we have our main file with the master password and user passwords, then we have the
-	IV And Secret Key encrypted in a separate file, that we utilize in the program to decrypt our password file.
+   	For the Symmetric Key encryption, we have our Password_Keeper file with the master password and user passwords, then
+       	we have the IV And Secret Key encrypted in the Not_Secret_Stuff file, that we utilize in the program to decrypt our
+       	password file.
 
-	When we encrypt the shared password file, 
+	When we encrypt the Password_Keeper_Share file, it uses the same encryption key as the Password_Keeper file so when
+       	sharing, we send both the Passowrd_Keeper_Share file as well as our Not_Secret_Stuff file.
 
 3) What are the revisied list of vulnerabilities?
 	If the program is left running, the password file is left available to anyone to open and view it, hence the file is
